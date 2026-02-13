@@ -12,7 +12,9 @@ const playBackgroundAudio = () => {
 
   if (playPromise !== undefined) {
     playPromise.catch((error) => {
-      console.warn("Autoplay blocked by browser. Waiting for user interaction...");
+      console.warn(
+        "Autoplay blocked by browser. Waiting for user interaction...",
+      );
       // FALLBACK: If browser blocks it, play on the first click/tap anywhere
       const unlockAudio = () => {
         bgAudio.play();
@@ -55,7 +57,7 @@ const showAudioOverlay = () => {
             main.pause();
             main.currentTime = 0;
             // Leave it muted now; switchAudioTracks will unmute when playing
-            console.log('✓ Main audio unlocked for later autoplay');
+            console.log("✓ Main audio unlocked for later autoplay");
           }).catch(() => {
             // ignore
           });
@@ -110,22 +112,21 @@ const switchAudioTracks = () => {
   // 2. Start Main Audio
   mainAudio.volume = 1;
   mainAudio.muted = false;
-  
+
   const playPromise = mainAudio.play();
-  
+
   if (playPromise !== undefined) {
     playPromise.catch((error) => {
       console.warn("Main audio blocked:", error);
       // If the timeline reaches here but user hasn't clicked yet, force play on next click
-      const forcePlay = () => { 
-          mainAudio.play(); 
-          document.removeEventListener("click", forcePlay);
+      const forcePlay = () => {
+        mainAudio.play();
+        document.removeEventListener("click", forcePlay);
       };
       document.addEventListener("click", forcePlay);
     });
   }
 };
-
 
 // --- ANIMATION & LOGIC ---
 
@@ -140,22 +141,23 @@ const buildCharacterSpans = (element) => {
 const buildWordSpans = (element) => {
   if (!element) return;
   const words = element.textContent.trim().split(/\s+/);
-  element.innerHTML = words.map(w => `<span>${w}</span>`).join(" ");
+  element.innerHTML = words.map((w) => `<span>${w}</span>`).join(" ");
 };
 
 // --- Image Gallery Helpers ---
-const preloadImage = (src) => new Promise((resolve, reject) => {
-  const img = new Image();
-  img.onload = () => resolve(src);
-  img.onerror = reject;
-  img.src = src;
-});
+const preloadImage = (src) =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(src);
+    img.onerror = reject;
+    img.src = src;
+  });
 
 const startImageGallery = (imgEl, candidates = [], interval = 2000) => {
   if (!imgEl || !Array.isArray(candidates) || candidates.length === 0) return;
 
   // normalize candidate URLs (encode spaces)
-  const files = candidates.map(s => s.replace(/ /g, '%20'));
+  const files = candidates.map((s) => s.replace(/ /g, "%20"));
 
   let idx = 0;
   let timerId = null;
@@ -163,18 +165,20 @@ const startImageGallery = (imgEl, candidates = [], interval = 2000) => {
   const showImage = (index) => {
     const src = files[index % files.length];
     // fade out
-    imgEl.classList.remove('gallery-visible');
+    imgEl.classList.remove("gallery-visible");
     // wait for fade-out then swap src
     setTimeout(() => {
       imgEl.src = src;
       // ensure image is loaded before fade-in to avoid flicker
-      preloadImage(src).then(() => {
-        // small delay to ensure src applied
-        setTimeout(() => imgEl.classList.add('gallery-visible'), 40);
-      }).catch(() => {
-        // still try to show it
-        imgEl.classList.add('gallery-visible');
-      });
+      preloadImage(src)
+        .then(() => {
+          // small delay to ensure src applied
+          setTimeout(() => imgEl.classList.add("gallery-visible"), 40);
+        })
+        .catch(() => {
+          // still try to show it
+          imgEl.classList.add("gallery-visible");
+        });
     }, 300);
   };
 
@@ -248,7 +252,7 @@ const animationTimeline = () => {
         z: 10,
         opacity: 0,
       },
-      "+=0.5"
+      "+=0.5",
     )
     .to(".idea-5 span", 0.7, { rotation: 90, x: 8 }, "+=0.4")
     .to(".idea-5", 0.7, { scale: 0.2, opacity: 0 }, "+=2")
@@ -256,37 +260,44 @@ const animationTimeline = () => {
       ".idea-6 span",
       0.8,
       { scale: 3, opacity: 0, rotation: 15, ease: Expo.easeOut },
-      0.2
+      0.2,
     )
     .staggerTo(
       ".idea-6 span",
       0.8,
       { scale: 3, opacity: 0, rotation: -15, ease: Expo.easeOut },
       0.2,
-      "+=1"
+      "+=1",
     )
     .staggerFromTo(
       ".baloons img",
       2.5,
       { opacity: 0.9, y: 1400 },
       { opacity: 1, y: -1000 },
-      0.2
+      0.2,
     )
-    .from(
+    .fromTo(
       ".girl-dp",
-      0.5,
+      0.8,
       { scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 },
-      "-=2"
+      { scale: 1, opacity: 1, x: 0, y: 0, rotationZ: 0, ease: Power2.easeOut },
+      "-=2",
     )
-      // start slideshow for the main image when we reveal the girl
-      .call(function() {
-        const img = document.getElementById('imagePath');
-        if (img) {
-          startImageGallery(img, ['img/rita.jpg','./img/rita2.jpg','./img/rita3.jpg'], 2000);
-        }
-      })
+    // start slideshow for the main image when we reveal the girl
+    .call(function () {
+      const img = document.getElementById("imagePath");
+      if (!img) return;
+
+      const images = ["img/rita.jpg", "img/rita2.jpg", "img/rita3.jpg"];
+
+      img.src = images[0];
+
+      setTimeout(() => {
+        startImageGallery(img, images, 2000);
+      }, 1500);
+    })
     // HERE IS THE FIX: Call the switch function correctly
-    .call(switchAudioTracks) 
+    .call(switchAudioTracks)
     .staggerFrom(
       ".wish-hbd span",
       0.7,
@@ -297,7 +308,7 @@ const animationTimeline = () => {
         skewX: "30deg",
         ease: Elastic.easeOut.config(1, 0.5),
       },
-      0.1
+      0.1,
     )
     .staggerFromTo(
       ".wish-hbd span",
@@ -305,7 +316,7 @@ const animationTimeline = () => {
       { scale: 1.4, rotationY: 150 },
       { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut },
       0.1,
-      "party"
+      "party",
     )
     .from(
       ".wish h5",
@@ -315,7 +326,7 @@ const animationTimeline = () => {
         y: 10,
         skewX: "-15deg",
       },
-      "party"
+      "party",
     )
     .staggerTo(
       ".eight svg",
@@ -327,7 +338,7 @@ const animationTimeline = () => {
         repeat: 3,
         repeatDelay: 1.4,
       },
-      0.3
+      0.3,
     )
     .to(".six", 0.5, { opacity: 0, y: 30, zIndex: "-1" })
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
@@ -340,8 +351,13 @@ const animationTimeline = () => {
       // On replay, reset audio state
       const bgAudio = document.getElementById("background-audio");
       const mainAudio = document.getElementById("audio");
-      if(mainAudio) { mainAudio.pause(); mainAudio.currentTime = 0; }
-      if(bgAudio) { bgAudio.play(); } 
+      if (mainAudio) {
+        mainAudio.pause();
+        mainAudio.currentTime = 0;
+      }
+      if (bgAudio) {
+        bgAudio.play();
+      }
     });
   }
 };
@@ -374,10 +390,10 @@ const fetchData = async () => {
 
 const initializePage = async () => {
   await fetchData();
-  
+
   // 1. Try to play background audio immediately
   playBackgroundAudio();
-  
+
   // 2. Show overlay; animation will start after countdown when user activates audio
   showAudioOverlay();
 };

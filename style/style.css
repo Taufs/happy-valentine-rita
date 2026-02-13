@@ -96,6 +96,17 @@ body {
     padding: 10px;
     position: relative;
 }
+.six {
+    position: relative;
+    z-index: 5; /* Ensure it stays above other slides */
+}
+
+#imagePath {
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+    position: relative;
+    z-index: 6;
+}
 
 .text-box p {
     margin: 0;
@@ -359,7 +370,6 @@ body {
         font-size: 1.2rem;
     }
 }
-
 @media screen and (max-width: 500px) {
     .container {
         width: 90%;
@@ -392,7 +402,7 @@ body {
     }
 
     .two {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
 
     .three {
@@ -401,16 +411,9 @@ body {
 
 
 /* Gallery fade for the main image */
-#imagePath {
-    opacity: 0;
-    transition: opacity 0.6s ease-in-out;
-}
 
-#imagePath.gallery-visible {
-    opacity: 1;
-}
     .five p {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
 
     .five .idea-5 {
