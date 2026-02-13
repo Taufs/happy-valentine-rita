@@ -168,14 +168,12 @@ body {
 .six img,
 .girl-dp {
     display: inline-block;
-    max-width: 45%;
+    width: 30%;
+    max-width: 160px;
     height: auto;
     border: 6px solid #ff69b4;
-    /* bright pink border */
     border-radius: 16px;
-    /* rounded corners */
     box-shadow: 0 8px 20px rgba(255, 105, 180, 0.25);
-    /* soft pink glow */
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -275,7 +273,7 @@ body {
 }
 
 .wish-hbd {
-    font-size: 3em;
+    font-size: 2em;
     margin: 0;
     font-weight: 600;
     /* text-transform: uppercase; */
@@ -285,7 +283,7 @@ body {
 
 .wish h5 {
     font-weight: 300;
-    font-size: 2rem;
+    font-size: 1.2rem;
     margin: 10px 0 0;
 }
 
