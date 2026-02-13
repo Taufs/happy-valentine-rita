@@ -399,6 +399,16 @@ body {
         font-size: 1.3rem;
     }
 
+
+/* Gallery fade for the main image */
+#imagePath {
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+#imagePath.gallery-visible {
+    opacity: 1;
+}
     .five p {
         font-size: 1rem;
     }

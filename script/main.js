@@ -143,6 +143,54 @@ const buildWordSpans = (element) => {
   element.innerHTML = words.map(w => `<span>${w}</span>`).join(" ");
 };
 
+// --- Image Gallery Helpers ---
+const preloadImage = (src) => new Promise((resolve, reject) => {
+  const img = new Image();
+  img.onload = () => resolve(src);
+  img.onerror = reject;
+  img.src = src;
+});
+
+const startImageGallery = (imgEl, candidates = [], interval = 2000) => {
+  if (!imgEl || !Array.isArray(candidates) || candidates.length === 0) return;
+
+  // normalize candidate URLs (encode spaces)
+  const files = candidates.map(s => s.replace(/ /g, '%20'));
+
+  let idx = 0;
+  let timerId = null;
+
+  const showImage = (index) => {
+    const src = files[index % files.length];
+    // fade out
+    imgEl.classList.remove('gallery-visible');
+    // wait for fade-out then swap src
+    setTimeout(() => {
+      imgEl.src = src;
+      // ensure image is loaded before fade-in to avoid flicker
+      preloadImage(src).then(() => {
+        // small delay to ensure src applied
+        setTimeout(() => imgEl.classList.add('gallery-visible'), 40);
+      }).catch(() => {
+        // still try to show it
+        imgEl.classList.add('gallery-visible');
+      });
+    }, 300);
+  };
+
+  // show first immediately
+  showImage(idx);
+  idx += 1;
+
+  timerId = setInterval(() => {
+    showImage(idx);
+    idx += 1;
+  }, interval);
+
+  // return stop function
+  return () => clearInterval(timerId);
+};
+
 const animationTimeline = () => {
   buildCharacterSpans(document.querySelector(".hbd-chatbox"));
   buildWordSpans(document.querySelector(".wish-hbd"));
@@ -230,6 +278,13 @@ const animationTimeline = () => {
       { scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 },
       "-=2"
     )
+      // start slideshow for the main image when we reveal the girl
+      .call(function() {
+        const img = document.getElementById('imagePath');
+        if (img) {
+          startImageGallery(img, ['./img/rita.jpg','./img/rita%202.jpg','./img/rita%203.jpg'], 3500);
+        }
+      })
     // HERE IS THE FIX: Call the switch function correctly
     .call(switchAudioTracks) 
     .staggerFrom(
