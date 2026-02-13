@@ -108,9 +108,14 @@ body {
 }
 
 .idea-5 span,
-.idea-6 span,
+.idea-6 span {
+  display: inline-block;
+}
+
+/* Word spans inside the wish headline should have spacing */
 .wish-hbd span {
   display: inline-block;
+  margin-right: 0.6rem;
 }
 
 .idea-6 span {
@@ -133,10 +138,21 @@ body {
   color: inherit;
 }
 
-.six img {
+.six img,
+.girl-dp {
   display: inline-block;
   max-width: 45%;
   height: auto;
+  border: 6px solid #ff69b4; /* bright pink border */
+  border-radius: 16px; /* rounded corners */
+  box-shadow: 0 8px 20px rgba(255, 105, 180, 0.25); /* soft pink glow */
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.six img:hover,
+.girl-dp:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(255, 105, 180, 0.35);
 }
 
 .six .hat {
@@ -233,6 +249,7 @@ body {
   margin: 0;
   font-weight: 600;
   /* text-transform: uppercase; */
+  word-spacing: 0.6rem; /* extra space between words */
 }
 
 .wish h5 {

@@ -68,9 +68,16 @@ const buildCharacterSpans = (element) => {
     .join("</span><span>")}</span>`;
 };
 
+// Wrap each word in a span (preserves spacing between words)
+const buildWordSpans = (element) => {
+  if (!element) return;
+  const words = element.textContent.trim().split(/\s+/);
+  element.innerHTML = words.map(w => `<span>${w}</span>`).join(" ");
+};
+
 const animationTimeline = () => {
   buildCharacterSpans(document.querySelector(".hbd-chatbox"));
-  buildCharacterSpans(document.querySelector(".wish-hbd"));
+  buildWordSpans(document.querySelector(".wish-hbd"));
 
   const ideaTextTrans = {
     opacity: 0,
