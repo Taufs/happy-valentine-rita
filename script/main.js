@@ -282,7 +282,7 @@ const animationTimeline = () => {
       .call(function() {
         const img = document.getElementById('imagePath');
         if (img) {
-          startImageGallery(img, ['./img/rita.jpg','./img/rita%202.jpg','./img/rita%203.jpg'], 3500);
+          startImageGallery(img, ['./img/rita.jpg','./img/rita2.jpg','./img/rita3.jpg'], 2000);
         }
       })
     // HERE IS THE FIX: Call the switch function correctly
