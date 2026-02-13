@@ -25,6 +25,57 @@ const playBackgroundAudio = () => {
     });
   }
 };
+// Show a full-screen overlay that requires a click to enable audio
+const showAudioOverlay = () => {
+  const overlay = document.getElementById("audio-overlay");
+  if (!overlay) return;
+
+  const content = overlay.querySelector(".overlay-content");
+  if (!content) return;
+
+  const activateAudio = () => {
+    const bg = document.getElementById("background-audio");
+    const main = document.getElementById("audio");
+
+    // Ensure audios are ready and unmuted
+    if (bg) {
+      bg.muted = false;
+      bg.volume = 1;
+      bg.play().catch(() => {});
+    }
+    if (main) {
+      main.muted = false;
+      main.volume = 1;
+    }
+
+    // Start 3..2..1 countdown visible in the overlay
+    let count = 3;
+    content.innerHTML = `<div class="countdown" style="font-size:48px;font-weight:700;color:#ff69b4">${count}</div>`;
+    const tick = () => {
+      count -= 1;
+      if (count > 0) {
+        content.querySelector(".countdown").innerText = count;
+        setTimeout(tick, 700);
+      } else {
+        // hide overlay and start animation
+        overlay.classList.add("hidden");
+        // restore overlay content for potential re-use
+        content.innerHTML = `<p>Click anywhere to enable sound</p><small>Tap once to unmute and play</small>`;
+        // start animation timeline now
+        animationTimeline();
+      }
+    };
+
+    setTimeout(tick, 700);
+
+    overlay.removeEventListener("click", activateAudio);
+    overlay.removeEventListener("touchstart", activateAudio);
+  };
+
+  // Support click or touch
+  overlay.addEventListener("click", activateAudio, { once: true });
+  overlay.addEventListener("touchstart", activateAudio, { once: true });
+};
 
 const switchAudioTracks = () => {
   const bgAudio = document.getElementById("background-audio");
@@ -255,10 +306,8 @@ const initializePage = async () => {
   // 1. Try to play background audio immediately
   playBackgroundAudio();
   
-  // 2. Start animation
-  setTimeout(() => {
-    animationTimeline();
-  }, 200);
+  // 2. Show overlay; animation will start after countdown when user activates audio
+  showAudioOverlay();
 };
 
 initializePage();
