@@ -44,6 +44,27 @@ const showAudioOverlay = () => {
       bg.play().catch(() => {});
     }
 
+    // Unlock main audio for later autoplay on mobile: briefly play it muted then pause.
+    if (main) {
+      try {
+        // Keep it muted so user doesn't hear this unlocking play
+        main.muted = true;
+        const p = main.play();
+        if (p !== undefined) {
+          p.then(() => {
+            main.pause();
+            main.currentTime = 0;
+            // Leave it muted now; switchAudioTracks will unmute when playing
+            console.log('✓ Main audio unlocked for later autoplay');
+          }).catch(() => {
+            // ignore
+          });
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
     // Start 3..2..1 countdown visible in the overlay
     let count = 3;
     content.innerHTML = `<div class="countdown" style="font-size:48px;font-weight:700;color:#ff69b4">${count}</div>`;
