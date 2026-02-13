@@ -279,10 +279,10 @@ const animationTimeline = () => {
       "-=2"
     )
       // start slideshow for the main image when we reveal the girl
-        .call(function() {
+      .call(function() {
         const img = document.getElementById('imagePath');
         if (img) {
-          startImageGallery(img, ['img/rita.jpg','img/rita2.jpg','img/rita3.jpg'], 2000);
+          startImageGallery(img, ['img/rita.jpg','./img/rita2.jpg','./img/rita3.jpg'], 2000);
         }
       })
     // HERE IS THE FIX: Call the switch function correctly
