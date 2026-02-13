@@ -37,15 +37,11 @@ const showAudioOverlay = () => {
     const bg = document.getElementById("background-audio");
     const main = document.getElementById("audio");
 
-    // Ensure audios are ready and unmuted
+    // Ensure background audio is ready and unmuted (do NOT start main audio here)
     if (bg) {
       bg.muted = false;
       bg.volume = 1;
       bg.play().catch(() => {});
-    }
-    if (main) {
-      main.muted = false;
-      main.volume = 1;
     }
 
     // Start 3..2..1 countdown visible in the overlay
